@@ -4,7 +4,7 @@ import pydeck as pdk
 import os
 
 # MAPBOX_API_KEY
-os.environ['MAPBOX_API_KEY'] = 'pk.eyJ1IjoibWFsbzIxc3QiLCJhIjoiY2p1NTBpcWwzMTNzdTQ1cDhvZDZlNGY2byJ9.NHFRXtvw6cd2i-MbKPECrw'
+os.environ['MAPBOX_API_KEY'] = st.secrets["MAPBOX_API_KEY"]
 
 # Data Load
 @st.cache
