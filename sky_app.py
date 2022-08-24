@@ -75,7 +75,7 @@ with col1:
             longitude=131.0,
             bearing=0,
             pitch=50,
-            zoom=4.5,
+            zoom=4,
         ),
 
         layers = [
@@ -95,7 +95,7 @@ with col2:
             longitude=131.0,
             bearing=0,
             pitch=50,
-            zoom=4.5,
+            zoom=4,
         ),
 
         layers = [
