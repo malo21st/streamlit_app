@@ -22,13 +22,13 @@ from_a = st.sidebar.selectbox("どこから:", ['すべて'] + list(df_2020['pre
 
 to_b = st.sidebar.selectbox("どこへ:", ['すべて'] + list(df_2020['opp_pref_name'].unique()))
 
-if (dep == 'すべて') & (arr == 'すべて'):
+if (from_a == 'すべて') & (to_b == 'すべて'):
     df_data_2019 = df_2019
     df_data_2020 = df_2020
-elif (dep != 'すべて') & (arr == 'すべて'):
+elif (from_a != 'すべて') & (to_b == 'すべて'):
     df_data_2019 = df_2019.query('pref_name == from_a')
     df_data_2020 = df_2020.query('pref_name == from_a')
-elif (dep == 'すべて') & (arr != 'すべて'):
+elif (from_a == 'すべて') & (to_b != 'すべて'):
     df_data_2019 = df_2019.query('opp_pref_name == to_b')
     df_data_2020 = df_2020.query('opp_pref_name == to_b')
 else:
