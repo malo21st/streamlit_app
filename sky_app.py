@@ -41,7 +41,7 @@ df_2020_l = df_2020.query("int_change < 0")
 
 # BODY
 ## TITLE
-st.title('日本の空港間流通量')
+st.title('居住都道府県別の延べ宿泊者数（日本人）')
 
 ## ArcLayer MAP
 WHITE_RGB = (255, 255, 255, 10)
@@ -110,6 +110,6 @@ with col2:
 ## Table
 col3, col4 = st.columns((1, 1))
 with col3:
-    df_2019.iloc[:, [1, 3, 4, 5]]
+    df_2019.iloc[:, [1, 3, 5, 4]]
 with col4:
-    df_2020.iloc[:, [1, 3, 4, 5]]
+    df_2020.iloc[:, [1, 3, 5, 4]]
