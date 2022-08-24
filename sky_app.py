@@ -26,9 +26,9 @@ df_2020_m = df_2020.query("int_change == 0")
 df_2020_l = df_2020.query("int_change < 0")
 
 # SIDE BAR
-dep = st.sidebar.selectbox("出発:", ['すべて'] + list(df_2020['dep'].unique()))
+# dep = st.sidebar.selectbox("出発:", ['すべて'] + list(df_2020['dep'].unique()))
 
-arr = st.sidebar.selectbox("到着:", ['すべて'] + list(df_2020['arr'].unique()))
+# arr = st.sidebar.selectbox("到着:", ['すべて'] + list(df_2020['arr'].unique()))
 
 # if (dep == 'すべて') & (arr == 'すべて'):
 #     df_data = df_sky
