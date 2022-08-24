@@ -6,7 +6,7 @@ import os
 st.set_page_config(layout="wide")
 
 # MAPBOX_API_KEY
-os.environ['MAPBOX_API_KEY'] = st.secrets["MAPBOX_API_KEY"]
+# os.environ['MAPBOX_API_KEY'] = st.secrets["MAPBOX_API_KEY"]
 
 # Data Load
 @st.cache
