@@ -46,6 +46,7 @@ TOOLTIP_TEXT = {"html": "<b>{dep} => {arr}</b><br>旅客数：{pasN}人<br>貨�
 col1, col2 = st.columns((1, 1))
 
 with col1:
+    st.write("２０１８～２０１９年")
     st.pydeck_chart(pdk.Deck(
         initial_view_state = pdk.ViewState(
             latitude=34.0,
@@ -73,6 +74,7 @@ with col1:
     ))
 
 with col2:
+    st.write("２０１９～２０２０年")
     st.pydeck_chart(pdk.Deck(
         initial_view_state = pdk.ViewState(
             latitude=34.0,
