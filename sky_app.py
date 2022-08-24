@@ -102,6 +102,6 @@ with col2:
 ## Table
 col3, col4 = st.columns((1, 1))
 with col3:
-    df_data.iloc[:, [:7]]
+    df_data.iloc[:, [0, 1, 2, 3, 4, 5, 6, 7]]
 with col4:
-    df_data.iloc[:, [:7]]
+    df_data.iloc[:, [0, 1, 2, 3, 4, 5, 6, 7]]
