@@ -43,7 +43,7 @@ GREEN_RGB = [0, 255, 0, 40]
 RED_RGB = [240, 100, 0, 40]
 TOOLTIP_TEXT = {"html": "<b>{dep} => {arr}</b><br>旅客数：{pasN}人<br>貨物量：{crgN}トン<br>距　離：{dist}km<br>頻　度：{freq}本／週"}
 
-col1, col2 = st.columns((1,1))
+col1, col2 = st.columns((1, 1))
 
 with col1:
     st.pydeck_chart(pdk.Deck(
@@ -100,4 +100,8 @@ with col2:
     ))
 
 ## Table
-df_data
+col3, col4 = st.columns((1, 1))
+with col3:
+    df_data[:, [:7]]
+with col4:
+    df_data[:, [:7]]
