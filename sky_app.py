@@ -17,27 +17,30 @@ def get_data():
 
 df_2019, df_2020 = get_data()
 
-df_2019_h = df_2019.query("int_change > 0")
-df_2019_m = df_2019.query("int_change == 0")
-df_2019_l = df_2019.query("int_change < 0")
-
-df_2020_h = df_2020.query("int_change > 0")
-df_2020_m = df_2020.query("int_change == 0")
-df_2020_l = df_2020.query("int_change < 0")
-
 # SIDE BAR
-# dep = st.sidebar.selectbox("出発:", ['すべて'] + list(df_2020['dep'].unique()))
+from_a = st.sidebar.selectbox("どこから:", ['すべて'] + list(df_2020['pref_name'].unique()))
 
-# arr = st.sidebar.selectbox("到着:", ['すべて'] + list(df_2020['arr'].unique()))
+to_b = st.sidebar.selectbox("どこへ:", ['すべて'] + list(df_2020['opp_pref_name'].unique()))
 
-# if (dep == 'すべて') & (arr == 'すべて'):
-#     df_data = df_sky
-# elif (dep != 'すべて') & (arr == 'すべて'):
-#     df_data = df_sky[df_sky['dep']==dep]
-# elif (dep == 'すべて') & (arr != 'すべて'):
-#     df_data = df_sky[df_sky['arr']==arr]
-# else:
-#     df_data = df_sky[(df_sky['dep']==dep) & (df_sky['arr']==arr)]
+if (dep == 'すべて') & (arr == 'すべて'):
+    df_data_2019 = df_2019
+    df_data_2020 = df_2020
+elif (dep != 'すべて') & (arr == 'すべて'):
+    df_data_2019 = df_2019.query('pref_name == from_a')
+    df_data_2020 = df_2020.query('pref_name == from_a')
+elif (dep == 'すべて') & (arr != 'すべて'):
+    df_data_2019 = df_2019.query('opp_pref_name == to_b')
+    df_data_2020 = df_2020.query('opp_pref_name == to_b')
+else:
+    df_data_2019 = df_2019.query('pref_name == from_a and opp_pref_name == to_b')
+    
+df_2019_h = df_data_2019.query("int_change > 0")
+df_2019_m = df_data_2019.query("int_change == 0")
+df_2019_l = df_data_2019.query("int_change < 0")
+
+df_2020_h = df_data_2020.query("int_change > 0")
+df_2020_m = df_data_2020.query("int_change == 0")
+df_2020_l = df_data_2020.query("int_change < 0")
 
 # BODY
 ## TITLE
@@ -63,7 +66,6 @@ def arc_layer(df, layer_RGB, width):
             pickable=True,
             auto_highlight=True,
         ),
-
 
 col1, col2 = st.columns((1, 1))
 
