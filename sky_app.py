@@ -26,13 +26,13 @@ if (from_a == 'すべて') & (to_b == 'すべて'):
     df_data_2019 = df_2019
     df_data_2020 = df_2020
 elif (from_a != 'すべて') & (to_b == 'すべて'):
-    df_data_2019 = df_2019.query(f'pref_name == {from_a}')
-    df_data_2020 = df_2020.query(f'pref_name == {from_a}')
+    df_data_2019 = df_2019.query(f'pref_name == "{from_a}"')
+    df_data_2020 = df_2020.query(f'pref_name == "{from_a}"')
 elif (from_a == 'すべて') & (to_b != 'すべて'):
-    df_data_2019 = df_2019.query(f'opp_pref_name == {to_b}')
-    df_data_2020 = df_2020.query(f'opp_pref_name == {to_b}')
+    df_data_2019 = df_2019.query(f'opp_pref_name == "{to_b}"')
+    df_data_2020 = df_2020.query(f'opp_pref_name == "{to_b}"')
 else:
-    df_data_2019 = df_2019.query(f'pref_name == {from_a} and opp_pref_name == {to_b}')
+    df_data_2019 = df_2019.query(f'pref_name == "{from_a}" and opp_pref_name == "{to_b}"')
     
 df_2019_h = df_data_2019.query("int_change > 0")
 df_2019_m = df_data_2019.query("int_change == 0")
