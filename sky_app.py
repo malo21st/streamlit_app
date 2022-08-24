@@ -11,99 +11,105 @@ st.set_page_config(layout="wide")
 # Data Load
 @st.cache
 def get_data():
-    df = pd.read_csv('sky.csv')
-    return df
+    df_2019 = pd.read_feather('data_2019.feather')
+    df_2020 = pd.read_feather('data_2020.feather')
+    return df_2019, df_2020
 
-df_sky = get_data()
+df_2019, df_2020 = get_data()
+
+df_2019_h = df_2019.query("int_change > 0")
+df_2019_m = df_2019.query("int_change == 0")
+df_2019_l = df_2019.query("int_change < 0")
+
+df_2020_h = df_2020.query("int_change > 0")
+df_2020_m = df_2020.query("int_change == 0")
+df_2020_l = df_2020.query("int_change < 0")
 
 # SIDE BAR
-year = st.sidebar.selectbox("西暦:", ["2011", "2012", "2014"])
+dep = st.sidebar.selectbox("出発:", ['すべて'] + list(df_2020['dep'].unique()))
 
-dep = st.sidebar.selectbox("出発:", ['すべて'] + list(df_sky['dep'].unique()))
+arr = st.sidebar.selectbox("到着:", ['すべて'] + list(df_2020['arr'].unique()))
 
-arr = st.sidebar.selectbox("到着:", ['すべて'] + list(df_sky['arr'].unique()))
-
-df_sky = df_sky[df_sky['year'] == int(year)]
-
-if (dep == 'すべて') & (arr == 'すべて'):
-    df_data = df_sky
-elif (dep != 'すべて') & (arr == 'すべて'):
-    df_data = df_sky[df_sky['dep']==dep]
-elif (dep == 'すべて') & (arr != 'すべて'):
-    df_data = df_sky[df_sky['arr']==arr]
-else:
-    df_data = df_sky[(df_sky['dep']==dep) & (df_sky['arr']==arr)]
+# if (dep == 'すべて') & (arr == 'すべて'):
+#     df_data = df_sky
+# elif (dep != 'すべて') & (arr == 'すべて'):
+#     df_data = df_sky[df_sky['dep']==dep]
+# elif (dep == 'すべて') & (arr != 'すべて'):
+#     df_data = df_sky[df_sky['arr']==arr]
+# else:
+#     df_data = df_sky[(df_sky['dep']==dep) & (df_sky['arr']==arr)]
 
 # BODY
 ## TITLE
 st.title('日本の空港間流通量')
 
 ## ArcLayer MAP
-GREEN_RGB = [0, 255, 0, 40]
-RED_RGB = [240, 100, 0, 40]
-TOOLTIP_TEXT = {"html": "<b>{dep} => {arr}</b><br>旅客数：{pasN}人<br>貨物量：{crgN}トン<br>距　離：{dist}km<br>頻　度：{freq}本／週"}
+WHITE_RGB = (255, 255, 255, 10)
+BLUE_RGB = (0, 255, 255, 80)
+GREEN_RGB = (0, 255, 0, 80)
+RED_RGB = [250, 50, 0, 80]
+TOOLTIP_TEXT = {"html": "<b>{pref_name} => {opp_pref_name}</b><br>宿泊者数：{value}人（{year}）"}
+
+def arc_layer(df, layer_RGB, width):
+    return pydeck.Layer(
+            "ArcLayer",
+            data=df,
+            get_width=f"{width}",
+            get_source_position=["lon", "lat"],
+            get_target_position=["opp_pref_lon", "opp_pref_lat"],
+            get_tilt=15,
+            get_source_color=WHITE_RGB,
+            get_target_color=layer_RGB,
+            pickable=True,
+            auto_highlight=True,
+        ),
+
 
 col1, col2 = st.columns((1, 1))
 
 with col1:
     st.write("２０１８～２０１９年")
-    st.pydeck_chart(pdk.Deck(
-        initial_view_state = pdk.ViewState(
+    st.pydeck_chart(pydeck.Deck(
+        initial_view_state = pydeck.ViewState(
             latitude=34.0,
             longitude=131.0,
             bearing=0,
             pitch=50,
-            zoom=4,
+            zoom=5,
         ),
 
         layers = [
-            pdk.Layer(
-                "ArcLayer",
-                data=df_data,
-                get_width="3",
-                get_source_position=["dep_lon", "dep_lat"],
-                get_target_position=["arr_lon", "arr_lat"],
-                get_tilt=15,
-                get_source_color=RED_RGB,
-                get_target_color=GREEN_RGB,
-                pickable=True,
-                auto_highlight=True,
-            ),      
+            arc_layer(df_2019_h, RED_RGB, 6),
+            arc_layer(df_2019_m, GREEN_RGB, 4),
+            arc_layer(df_2019_l, BLUE_RGB, 2),
         ],
-        tooltip = TOOLTIP_TEXT,
-    ))
 
+        tooltip = TOOLTIP_TEXT,
+))
+        
 with col2:
     st.write("２０１９～２０２０年")
-    st.pydeck_chart(pdk.Deck(
-        initial_view_state = pdk.ViewState(
+    st.pydeck_chart(pydeck.Deck(
+        initial_view_state = pydeck.ViewState(
             latitude=34.0,
             longitude=131.0,
             bearing=0,
             pitch=50,
-            zoom=4,
+            zoom=5,
         ),
 
         layers = [
-            pdk.Layer(
-                "ArcLayer",
-                data=df_data,
-                get_width="3",
-                get_source_position=["dep_lon", "dep_lat"],
-                get_target_position=["arr_lon", "arr_lat"],
-                get_tilt=15,
-                get_source_color=RED_RGB,
-                get_target_color=GREEN_RGB,
-                pickable=True,
-                auto_highlight=True,
-            ),      
+            arc_layer(df_2020_h, RED_RGB, 6),
+            arc_layer(df_2020_m, GREEN_RGB, 4),
+            arc_layer(df_2020_l, BLUE_RGB, 2),
         ],
+
         tooltip = TOOLTIP_TEXT,
-    ))
+))
 
 ## Table
 col3, col4 = st.columns((1, 1))
 with col3:
-    df_data.iloc[:, [0, 1, 2, 3, 4, 5, 6, 7]]
+    df_2019.iloc[:, [1, 3, 4, 5]]
 with col4:
-    df_data.iloc[:, [0, 1, 2, 3, 4, 5, 6, 7]]
+    df_2020.iloc[:, [1, 3, 4, 5]]
